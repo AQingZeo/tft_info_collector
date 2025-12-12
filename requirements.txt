@@ -1,0 +1,6 @@
+typer
+rich
+pydantic
+python-dotenv
+httpx
+ujson
