@@ -1,6 +1,14 @@
+# CLI framework
 typer
 rich
-pydantic
-python-dotenv
+
+# HTTP + async
 httpx
 ujson
+
+# Config / environment
+python-dotenv
+pydantic-settings
+
+# Compatibility (Python 3.9 safe)
+typing-extensions
