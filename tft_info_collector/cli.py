@@ -5,6 +5,7 @@ import asyncio
 
 from .fetch_puuids import collect_players
 from .fetch_matches import fetch_matches
+from .clean_matches import clean_matches
 
 app = typer.Typer(help="TFT data collection CLI")
 
@@ -62,6 +63,42 @@ def fetch_matches_cmd(
         )
     )
     typer.echo("Finished fetching matches")
+
+
+@app.command("clean")
+def clean_cmd(
+    raw_dir: Path = typer.Option(
+        Path("data/raw/matches"),
+        "--raw-dir",
+        "-r",
+        help="Directory containing raw match JSON files",
+        exists=True,
+        file_okay=False,
+        dir_okay=True,
+    ),
+    out: Path = typer.Option(
+        Path("data/clean"),
+        "--out",
+        "-o",
+        help="Output CSV path",
+    ),
+    preset: str = typer.Option(
+        "default",
+        "--preset",
+        "-p",
+        help="Cleaning preset defined in clean_config.py",
+    ),
+):
+    """
+    Clean raw match JSON into analysis-ready CSV.
+    """
+    out.parent.mkdir(parents=True, exist_ok=True)
+    clean_matches(
+        raw_dir=raw_dir,
+        out=out,
+        preset=preset,
+    )
+    typer.echo(f"Saved cleaned data → {out}")
 
 
 def main():
