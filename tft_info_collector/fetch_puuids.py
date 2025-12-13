@@ -24,14 +24,24 @@ def fetch_league(platform: str, endpoint: str) -> Dict:
 
 def collect_players(platform: str, max_count: int) -> List[Dict]:
     collected: List[Dict] = []
+    counts_by_rank: Dict[str, int] = {}
 
     for endpoint in LEAGUE_ENDPOINTS:
         data = fetch_league(platform, endpoint)
+        entries = data.get("entries", [])
+        counts_by_rank[endpoint] = 0
 
-        for entry in data.get("entries", []):
+        for entry in entries:
             collected.append(entry)
+            counts_by_rank[endpoint] += 1
 
             if len(collected) >= max_count:
-                return collected
+                break
 
+        print(f"{endpoint.capitalize()}: {counts_by_rank[endpoint]} players retrieved")
+
+        if len(collected) >= max_count:
+            break
+
+    print(f"Total players retrieved: {len(collected)}")
     return collected
